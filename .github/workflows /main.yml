@@ -1,0 +1,46 @@
+name: Deploy Azure Function
+
+on:
+   [workflow_dispatch]
+
+env:
+ # NODE_VERSION: '14.x'
+  ## Enter the path to your storage account and include the name of the file share
+ AZUREFUNCDEST: 'https://data1purge.blob.core.windows.net/new-files'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@main
+
+   # - name: Setup Node ${{ env.NODE_VERSION }} Environment
+  #    uses: actions/setup-node@v1
+   #   with:
+    #    node-version: ${{ env.NODE_VERSION }}
+
+    ## Install a community package that adds the azcopy tool
+    - name: Install azcopy
+      uses: kheiakiyama/install-azcopy-action@v1.0.3
+
+    ## Build your application, replace Lerna with NPM/Yarn if that's more suitable for your project
+  #  - name: 'Lerna bootstrap & azure functions build'
+   #   shell: pwsh
+    #  run: |
+    #    lerna bootstrap
+     #   npm run build
+    #    popd
+#
+    #Clean up the directory before copying the new stuff over
+#    - uses: kheiakiyama/install-azcopy-action@v1
+ #     with:
+#          version: 'v10'
+#    - run: azcopy copy 'Old_File/*' '${{ env.AZUREFUNCDEST }}?${{ secrets.SAS_TOKEN }}' --recursive
+
+
+    ## Copy the contents of the azure functions
+    - uses: kheiakiyama/install-azcopy-action@v1
+      with:
+         version: 'v10'
+    - run: azcopy_v10 copy 'Old_File/*' '${{ env.AZUREFUNCDEST }}?${{ secrets.SAS_TOKEN }}' --recursive
