@@ -6,7 +6,7 @@ on:
 env:
  # NODE_VERSION: '14.x'
   ## Enter the path to your storage account and include the name of the file share
- AZUREFUNCDEST: 'https://bucketc2c .blob.core.windows.net/new-files'
+ AZUREFUNCDEST: 'https://bucketc2c.blob.core.windows.net/new-files'
 
 jobs:
   build-and-deploy:
