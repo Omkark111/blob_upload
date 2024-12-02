@@ -1,0 +1,25 @@
+name: Deploy New c2c upload file
+
+on:
+  workflow_dispatch:
+
+env:
+  AZUREFUNCDEST: 'https://bucketc2c.blob.core.windows.net/new-files'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v2
+
+      - name: Install azcopy
+        uses: kheiakiyama/install-azcopy-action@v1.0.3
+
+      # Delete all files in the container
+      - name: Empty the bucket
+        run: azcopy remove '${{ env.AZUREFUNCDEST }}?${{ secrets.SAS_TOKEN }}' --recursive
+
+      # Copy the contents of the azure functions
+      - name: Copy new files
+        run: azcopy copy 'Folder/*' '${{ env.AZUREFUNCDEST }}?${{ secrets.SAS_TOKEN }}' --recursive --from-to=LocalBlob
